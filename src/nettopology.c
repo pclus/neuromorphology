@@ -1,9 +1,9 @@
 #include "nettopology.h"
 
 int nx,ny,N;
-Neuron *neu; //array of neurons forming the graph
+Neuron *neu;	//array of neurons forming the graph
 
-//-------------------------------------------------------------------------
+// main
 int main(int argc, char **argv){
 	int i;
 
@@ -15,25 +15,18 @@ int main(int argc, char **argv){
 
 	return 1;
 }
+
 void outputs(){
+
+	FILE *fout;
 	fprintf(stderr,"Printing outputs...\n");
 	int i,j;
-	FILE *fs=fopen("outputs/stats.dat","w");
+	fout=fopen("outputs/stats.dat","w");
 	for(i=0;i<N;i++){
-		fprintf(fs,"%d %d %d\n",i,neu[i].dendritic_radius,neu[i].k_out);
-	}
-	fclose(fs);
-	
-	/* Prints the dendritic trees of each node */
-	FILE *fout=fopen("outputs/lattice.dat","w");
-	for(i=0;i<nx;i++){
-		for(j=0;j<ny;j++){
-			fprintf(fout,"%d ", (LATTICE(i,j).n>0 ? 1 : 0));
-		}
-		fprintf(fout,"\n");
+		fprintf(fout,"%d %d %d\n",i,neu[i].dendritic_radius,neu[i].k_out);
 	}
 	fclose(fout);
-
+	
 	/* Network data as a list of edges with weights */
 	fout=fopen("outputs/network.dat","w");
 	fprintf(fout,"%d\n",N);
@@ -42,10 +35,10 @@ void outputs(){
 		fprintf(fout,"%d %d %d\n",i,neu[i].neighbours_out[j],neu[i].weights_out[j]);
 	fclose(fout);
 	
-	/* Coordinates x and y of the center of each node */
+	/* Coordinates x and y of the center of each node and dendritic tree radius*/
 	fout=fopen("outputs/coordinates.dat","w");
 	for(i=0;i<N;i++)
-		fprintf(fout,"%d %d\n",neu[i].coord_x, neu[i].coord_y);
+		fprintf(fout,"%d %d %d\n",neu[i].coord_x, neu[i].coord_y, neu[i].dendritic_radius);
 	fclose(fout);
 
 	/* Coordinates x,y,dx,dy of the edges, to plot using gnuplot*/
@@ -71,8 +64,8 @@ int initialize(int argc, char **argv){
 	fprintf(stderr,"Initializing...\n");
 	int i;
 
-	if(argc!=8){
-		fprintf(stderr,"USAGE: ./nettopology <soma_radius> <mean_dendritic_tree_radius> <std_dev_dendritic_tree_radius> <mean_axon_length> <std_dev_axon_growth_variation> <scale> <spine_x>\n");
+	if(argc!=7){
+		fprintf(stderr,"USAGE: ./nettopology <soma_radius> <mean_dendritic_tree_radius> <std_dev_dendritic_tree_radius> <mean_axon_length> <std_dev_axon_growth_variation> <scale>\n");
 		return -1;
 	}
 	
@@ -108,13 +101,12 @@ int initialize(int argc, char **argv){
 	}
 
 	//------- PARAMETERS--------- 
-	soma_radius=atoi(argv[1]) ;		//soma radius, fixed to 16  [16 (WT), 16 (WT)]
-	mean_dr=atoi(argv[2]); 			//average radius of dendritic tree; [160 (WT), 113 (TRIS)] (160*vals_xd)
-	sigma_dr=atoi(argv[3]); 		//std dev of dendritic tree radius; [40 (WT)]
-	sigma_a=sqrt(2/M_PI)*atoi(argv[4]);	//scaling of rayleigh distribution of axon length=sqrt(2/pi)*mean [sqrt(2/pi)*500 (WT)]
-	sigma_angle=atoi(argv[5]);		//standar deviation of the angle change on the axon growth [6 (degrees) (WT)]
+	soma_radius=atoi(argv[1]) ;		//soma radius, fixed to 16  
+	mean_dr=atoi(argv[2]); 			//average radius of dendritic tree; 
+	sigma_dr=atoi(argv[3]); 		//std dev of dendritic tree radius, fixed to 40
+	sigma_a=sqrt(2/M_PI)*atoi(argv[4]);	//scaling of Rayleigh distribution of axon length=sqrt(2/pi)*mean, fixed to mean=500
+	sigma_angle=atoi(argv[5]);		//standar deviation of the angle change on the axon growth, fixed to 6 (degrees).
 	scale=atof(argv[6]);			//scale of the spine density (vals_ys)* scale of the dendrite density (vals_yd). Both scales are  w.r.t. WT. 
-	spine_x=atof(argv[7]);			//scale of the radius of spine density distribution (val_xs)
 	//---------------------------
 	fprintf(stderr,"done!\n");
 	return 1;
@@ -137,7 +129,7 @@ void finish(){
 }
 
 
-// Creates and initialize each neuron of the network
+// Creates and initializes each neuron of the network
 void create_neurons(){
 	fprintf(stderr,"Setting neurons...\n");
 	int i,j;
@@ -201,7 +193,7 @@ void grow_axons(){
 	double x,y, aux_x,aux_y;
 	double rad, angle, dx,dy,rr;
 	int x_int,y_int;
-	FILE *fout=fopen("outputs/axons.dat","w");
+	FILE *fout=fopen("outputs/axons.dat","w");	// output the axons for visualization
 
 	for(i=0;i<N;i++){ 			// for each neuron
 		length=neu[i].axon_length; 	// take the length of the axon
@@ -242,7 +234,7 @@ void grow_axons(){
 	return ;
 }
 
-// Says whether there should be a synapse or not
+// Determines whether there should be a synapse or not
 bool synapse(double radius, double rr){
 	if(radius < soma_radius) return false;
 	double p=RAND;
@@ -250,7 +242,7 @@ bool synapse(double radius, double rr){
 	return (p <= a ?  true : false );
 }
 
-// Probability of connection as a function of the distance to the soma
+// Probability of connection as a function of the distance to the soma (results from fitting the data)
 double alpha(double r, double bb){ 
 	double x=r*bb;
 	
@@ -276,15 +268,15 @@ void create_link(int i,int j){ // neuron i is conecting to j, so i sends the inp
 	if(i==j) return; //avoid autapses
 	int kk=neu[i].k_out,k=0;
 	for(k=0;k<kk;k++){
-		if(neu[i].neighbours_out[k]==j){	// if there is a connection from i to j already
-			neu[i].weights_out[k]++;	// increase the weight and 'àpali'.
+		if(neu[i].neighbours_out[k]==j){	// if there is a connection from i to j already;
+			neu[i].weights_out[k]++;	// increase the weight
 			break;
 		}
 	}
-	if(k==kk){				// if no connection is yet there;
+	if(k==kk){				// if no connection exists yet;
 		neu[i].k_out++;			// increase node degree,
-		neu[i].neighbours_out[kk]=j;	// set the new linkg,
-		neu[i].weights_out[kk]=1;		// and the new wheight
+		neu[i].neighbours_out[kk]=j;	// set the new link,
+		neu[i].weights_out[kk]=1;	// and the new wheight
 	}
 
 	return ;

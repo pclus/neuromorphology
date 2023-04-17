@@ -16,17 +16,16 @@
 
 #define LATTICE(x,y) lattice[(x)*ny+y]
 #define SQUARE(x) (x-floor(x) > 0.5 ? floor(x)+1 : floor(x))
-//#define LATTICE(x,y,k) lattice[(k)*nx*ny+((x)*ny+y)]
 
-///////////// GSL RNG ////////////////////
+// ------- GSL RNG --------
 const gsl_rng_type * T;
 gsl_rng * rrr;
-////////////////////////////////////
 
 
 typedef enum { excitatory, inhibitory } neuron_type;
 typedef enum { false, true } bool;
 
+// basic struct to build the network
 typedef struct neuron{
 
         // BASIC IDENTIFIERS
@@ -37,12 +36,9 @@ typedef struct neuron{
         int coord_y;            // center of the soma, coordinate y
         int dendritic_radius;   // denditric tree radius
         int axon_length;
-        //int denditric_density;        // densitiy of dendrites in the tree
 
         // NETWORK VARIABLES 
-        //int k_in;             // number of inputs from other neurons
         int k_out;              // number of outputs to other neurons
-        //struct node **neighbours_in;  // list of neighbours with a input to the neuron
         int *weights_out;
         int *neighbours_out;    // list of neighbours of the neuron
 
@@ -55,7 +51,7 @@ typedef struct smallsquare{
 
 
 int nx,ny,N;
-Neuron *neu; //array of neurons forming the graph
+Neuron *neu; 	//array of neurons forming the graph
 Square *lattice;
 int max_list, max_radius;
 int soma_radius,mean_dr,sigma_dr,sigma_a,sigma_angle;
