@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -Wno-maybe-uninitialized -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-result -g -pg -lm -lgsl -lgslcblas -O3
+CFLAGS=-Wall -Wno-maybe-uninitialized -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-result -lm -lgsl -lgslcblas -O3
 SOURCES=system.c netdynamics.c
 DEPENDENCIES=$(SOURCES:.c=.h)
 #GLOBAL_DEP=macros.h
