@@ -1,2 +1,3 @@
-# neuromorphology
-Computational neural network model incorporating neuromorphological alterations present in animal models of Down Syndrome.
+# Neuromorphology alterations in Down Syndrome: a computational model of the motor cortex
+
+
