@@ -1,3 +1,4 @@
 outputs/*
 nettopology
 .*.swp
+*.o

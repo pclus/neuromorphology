@@ -4,11 +4,8 @@
         #include <stdlib.h>
         #include <math.h>
         #include <time.h>
-        #include <unistd.h> // needed for pipes
-        #include <fcntl.h> // needed only for the nonblocking read
+        #include <unistd.h> 
         #include <sys/types.h>
-        #include <sys/wait.h>
-	#include <signal.h>
 #endif
 
 #ifndef GSL_H
@@ -20,11 +17,6 @@
 #ifndef SYSTEMSL_H
 #define SYSTEMSL_H
         #include "system.h"
-#endif
-
-#ifndef VISUAL_H
-#define VISUAL_H
-        #include "visualization.h"
 #endif
 
 #ifndef BOOL_H
