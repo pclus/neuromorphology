@@ -23,10 +23,10 @@ Network topologies for each phenotype are generated
 using the C source code `nettopology.c` and `nettopology.h` provided in `src/topology`.
 This software requires the [Gnu Scientific Library (GSL)](https://www.gnu.org/software/gsl/doc/html/index.html).
 
-The software can be compiled from `src/topology` with:
+The software can be compiled from `src` with:
 
 ```
-gcc nettopology.c -o ../../nettopology -O3 -lm -lgsl -lgslcblas
+gcc nettopology.c -o ../nettopology -O3 -lm -lgsl -lgslcblas
 ```
 
 The software requires 6 inputs, although only 2 of them are used in the paper:

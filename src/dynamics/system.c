@@ -5,18 +5,13 @@
 
 #define INHI2INHI (in2in) 
 
-//#define ALPHAexci (0.8) 
-//#define ALPHAinhi (18.0) 
-//#define ALPHAexte (0.6) 
+#define ALPHAexci (6e-3) 
+#define ALPHAinhi (720e-3) 
+#define ALPHAexte (8e-3) 
 
-#define ALPHAexci (0.6) 
-#define ALPHAinhi (58.0) 
-#define ALPHAexte (0.6) 
-
-#define TAUexci 10.0
-//#define TAUinhi 4.0
-#define TAUinhi 5.0
-#define TAUexte 10.0
+#define TAUexci 2.0
+#define TAUinhi 4.0
+#define TAUexte 2.0
 
 #define STRENGTH (1.0)
 
@@ -27,6 +22,9 @@
 #define EXCI_INIT_INPUT(t) (exp(-(t)/TAUexci))
 #define INHI_INIT_INPUT(t) (exp(-(t)/TAUinhi))
 #define EXTE_INIT_INPUT(t) (exp(-(t)/TAUexte))
+
+#define EE (0)
+#define EI (-70.0)
 
 #define DELAY(j,k) (delay[(k)*N+(j)])
 
@@ -45,8 +43,7 @@ int system_initialize(int argc, char **argv){
 	t=0;
 	dt=0.005;
 	if(initialize_network(argv[1])==-1){
-		fprintf(stderr,"Errors in system., quiting!\n");
-		fprintf(stderr,"(check you are providing a correct network file)\n");
+		fprintf(stderr,"Errors in system.c, sorry. See ya!\n");
 		return -1;
 	}
 	
@@ -245,14 +242,17 @@ int euler(){
 	synapses(t);
         for(i=0;i<N;i++){
                 a=(inhibitory[i]==1 ? 0.02 : 0.1);
-		I = Iexci[i] + Iexte[i] + Iinhi[i];
+		I = (Iexci[i]+Iexte[i])*(EE-x[i])+Iinhi[i]*(EI-x[i]);
                 k=f(x[i],y[i],I);  
                 l=g(x[i],y[i],a,b);
 		x_0[i]=x[i];
                 x[i]=x[i]+dt*k; 
                 y[i]=y[i]+dt*l;
 		if(inhibitory[i]==1)
-			activity += fabs(Iexci[i])+fabs(Iinhi[i])+fabs(Iexte[i]);
+			activity += (Iexci[i]+Iexte[i])*(EE-x[i]);
+			//activity += fabs((Iexci[i]+Iexte[i])*(EE-x[i]))+fabs(Iinhi[i]*(EI-x[i]));
+			//activity += I;
+			//activity += (Iexci[i]+Iexte[i]+Iinhi[i]);
                 new_spyke[i]=spyke_reseting(i);
         }
 	activity/=(1.*Nex);
@@ -305,7 +305,7 @@ void synapses(double t){
 		DELAY(i, id_delay)=-1;	// empty matrix for nexts steps
 		if(ts > 0){
 			if(inhi)
-				current=-INHI_INPUT(t-ts-1)/inhibitory_current;
+				current=INHI_INPUT(t-ts-1)/inhibitory_current;
 			else
 				current=EXCI_INPUT(t-ts-1)/excitatory_current;
 
