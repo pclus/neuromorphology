@@ -2,4 +2,5 @@ outputs/*
 nettopology
 .*.swp
 *.o
+*dat
 gmon.out
