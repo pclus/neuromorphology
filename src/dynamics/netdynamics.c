@@ -23,10 +23,11 @@ int main(int argc, char **argv ){
 		{
 			if(t>500)
 			{
-				fprintf(fout_lfp,"%lf %lf\n",t,activity/(1.0*N));
-				fprintf(fout,"%lf %lf\n",t,acti*1.0);
+				fprintf(fout_lfp,"%lf %lf\n",t,activity/N);
+				fprintf(fout,"%lf %lf\n",t,acti*1.0/N);
 			}
 			acti=0;
+			activity=0;
 		}
 		if(count%1000==0)
 		{

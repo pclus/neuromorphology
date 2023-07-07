@@ -216,7 +216,6 @@ int system_finish(){
 	free(cumulative_degree); 
 	free(neighbour);	
 	free(inhibitory); 	
-	//free(lfp);		
 	free(label);
 	free(Iexci); free(Iinhi); free(Iexte);
 	free(outputs);
@@ -248,14 +247,14 @@ int euler(){
 		x_0[i]=x[i];
                 x[i]=x[i]+dt*k; 
                 y[i]=y[i]+dt*l;
-		if(inhibitory[i]==1)
-			activity += (Iexci[i]+Iexte[i])*(EE-x[i]);
+		//if(inhibitory[i]==1)
+			activity += fabs((Iexte[i]+Iexci[i])*(EE-x[i])) + fabs(Iinhi[i]*(EI-x[i]));
 			//activity += fabs((Iexci[i]+Iexte[i])*(EE-x[i]))+fabs(Iinhi[i]*(EI-x[i]));
 			//activity += I;
 			//activity += (Iexci[i]+Iexte[i]+Iinhi[i]);
                 new_spyke[i]=spyke_reseting(i);
         }
-	activity/=(1.*Nex);
+	//activity/=(1.*Nex);
         t+=dt;
         return 0;
 }
@@ -274,7 +273,7 @@ int spyke_reseting(int i){
 		ts=t+dt*(30-x_0[i])/(x[i]-x_0[i]); 	// linear interpolation of spike time
     		spyke_times[i]=ts;			
     		DELAY(i,id_delay)=ts;			
-		//-------just for visualization ---------------
+		//------- only for visualization ---------------
                 if(inhi)
                           current=-INHI_INPUT(t-ts)/inhibitory_current;
                 else
@@ -286,7 +285,7 @@ int spyke_reseting(int i){
     		y[i]=y[i]+d; 		
     		r=1;
 
-		acti++;	// firing rate
+		acti++;			// firing rate
     	}
 	id_delay=(id_delay+1 < max_id_delay ? id_delay+1 : 0);
 

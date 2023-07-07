@@ -49,7 +49,7 @@ double Inoise;
 double *IC;
 double freqnoise, activity;
 int N;
-bool *external,*lfp;
+bool *external;
 
 
 int initialize_network(char *name);
