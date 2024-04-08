@@ -3,3 +3,4 @@ nettopology
 .*.swp
 *.o
 gmon.out
+networks/*
