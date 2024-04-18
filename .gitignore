@@ -1,5 +1,8 @@
 outputs/*
+!outputs/isi.sh
+!outputs/cv.jl
 nettopology
 .*.swp
 *.o
 gmon.out
+networks/*
