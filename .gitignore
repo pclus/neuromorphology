@@ -1,5 +1,6 @@
-!outputs/isi.sh
-!outputs/cv.jl
+!outputs/*.sh
+!outputs/*.jl
+!outputs/*.gpi
 outputs/*
 !outputs/isi.sh
 !outputs/cv.jl
