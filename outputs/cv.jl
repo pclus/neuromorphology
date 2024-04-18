@@ -3,11 +3,11 @@ using Statistics
 
 genotypes=["WT" "TgDyrk1A" "Ts65Dn"];
 for g in genotypes
-        stats = zeros(10,11,5)
+        stats = zeros(100,11,5)
         statsCV = zeros(11,5)
-        for i in 1:10
+        for (i,sim) in enumerate(0:99)
         	for (jj,j) in enumerate(5:15)
-        		filename = "isi_rp_sim_net_"*g*"1_"*string(i)*"_lam"*string(j)*".dat";
+        		filename = "from_cloud/ixi_0.3/isi_net_"*g*string(sim)*"_l"*string(j)*"_ixi.dat";
         
         		isi = readdlm(filename);
         		idE = findall(@. Int(isi[:,3])==1);
@@ -35,8 +35,8 @@ for g in genotypes
         cvi = reshape(cvi,:,1);
         λ = reshape(stats[:,:,5],:,1);
 
-        writedlm("CVdata_"*g*".dat", [λ cve cvi],' ')
-        writedlm("CVstat_"*g*".dat", statsCV,' ')
+        writedlm("CVdata__"*g*"_ixi.dat", [λ cve cvi],' ')
+        writedlm("CVstat_"*g*"_ixi.dat", statsCV,' ')
         
         
         #plot(stats[:,:,5],stats[:,:,2]./stats[:,:,1],lt=:scatter,legend=false);
@@ -46,3 +46,5 @@ end
 # command for gnuplot:
 # plot 'CVdata_WT.dat'  w p,'' smoo uniq w p, 'CVstat_WT.dat' u 1:2:3 w errorba lc black
 #
+#
+
