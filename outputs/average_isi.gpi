@@ -1,0 +1,11 @@
+do for[g in "WT Ts65Dn TgDyrk1A"]{
+	do for[k=0:99]{ 
+		set table 'temp.dat'
+		plot 'from_cloud/ixi_1.0/isi_net_'.g.k.'_l9.dat' u (bin($3==-1 ? $2 : NaN,bw)):(1.0) smoo fnorm w l lw 1
+		unset table
+		system("awk 'NR>4{print $2}' temp.dat > isidist".g.k.".dat ");
+	} 
+}
+
+
+
