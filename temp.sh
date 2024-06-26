@@ -10,14 +10,14 @@
 # alpha 0.1 and 2
 # beta 0.5 and 2
 
-./nettopology 16 78.15 40 500 6 0.1 
-cp outputs/network.dat networks/net_alpha0.1_beta0.5
-./nettopology 16 312.6 40 500 6 0.1
-cp outputs/network.dat networks/net_alpha0.1_beta2
-./nettopology 16 78.15 40 500 6 2
-cp outputs/network.dat networks/net_alpha2_beta0.5
-./nettopology 16 312.6 40 500 6 2
-cp outputs/network.dat networks/net_alpha2_beta2
+./nettopology 16 78.15 40 500 6 1 
+cp outputs/network.dat networks/net_alpha1_beta0.5
+./nettopology 16 312.6 40 500 6 1
+cp outputs/network.dat networks/net_alpha1_beta2
+./nettopology 16 156.30 40 500 6 0.1
+cp outputs/network.dat networks/net_alpha0.1_beta1
+./nettopology 16 156.30 40 500 6 2
+cp outputs/network.dat networks/net_alpha2_beta1
 
 for i in networks/net_alpha*;
 do
