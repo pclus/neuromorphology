@@ -1,5 +1,7 @@
 outputs/*
 networks/*
+!outputs/temp.dat
+!networks/temp.dat
 nettopology
 .*.swp
 *.o
