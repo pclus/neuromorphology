@@ -1,7 +1,4 @@
-outputs/*
-networks/*
-!outputs/temp.dat
-!networks/temp.dat
+outputs/*.dat
 nettopology
 .*.swp
 *.o
