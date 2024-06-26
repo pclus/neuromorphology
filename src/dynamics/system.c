@@ -238,7 +238,6 @@ int euler(){
 	int i;
 	double a,b=0.2,k,l;
 	double I;
-	activity=0;
 	synapses(t);
         for(i=0;i<N;i++){
                 a=(inhibitory[i]==1 ? 0.02 : 0.1);
@@ -249,13 +248,8 @@ int euler(){
                 x[i]=x[i]+dt*k; 
                 y[i]=y[i]+dt*l;
 		if(inhibitory[i]==1)
-			activity += (Iexci[i]+Iexte[i])*(EE-x[i]);
-			//activity += fabs((Iexci[i]+Iexte[i])*(EE-x[i]))+fabs(Iinhi[i]*(EI-x[i]));
-			//activity += I;
-			//activity += (Iexci[i]+Iexte[i]+Iinhi[i]);
                 new_spyke[i]=spyke_reseting(i);
         }
-	activity/=(1.*Nex);
         t+=dt;
         return 0;
 }
