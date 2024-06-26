@@ -6,9 +6,9 @@ int main(int argc, char **argv ){
 
 	FILE *fout,*fout_rp;
 	char *namm=malloc(sizeof(char)*200);
-	sprintf(namm,"outputs/spykes_%s.dat",argv[2]);
+	sprintf(namm,"outputs/firingrate_%s.dat",argv[2]);
 	fout=fopen(namm,"w");
-	sprintf(namm,"outputs/rp_%s.dat",argv[2]);
+	sprintf(namm,"outputs/raster_%s.dat",argv[2]);
 	fout_rp=fopen(namm,"w");
 	free(namm);
 

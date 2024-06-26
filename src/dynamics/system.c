@@ -247,7 +247,6 @@ int euler(){
 		x_0[i]=x[i];
                 x[i]=x[i]+dt*k; 
                 y[i]=y[i]+dt*l;
-		if(inhibitory[i]==1)
                 new_spyke[i]=spyke_reseting(i);
         }
         t+=dt;
