@@ -1,5 +1,7 @@
 # Neuromorphology alterations in Down Syndrome: a computational model of the motor cortex
 
+This repository contains the data and software used in the scientific paper [Modeling the impact of neuromorphological alterations in Down syndrome on fast neural oscillations](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012259).
+
 ## Data
 
 Data used in the article can be found in the `data` directory.
